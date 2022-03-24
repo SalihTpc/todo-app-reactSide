@@ -10,11 +10,11 @@ function App() {
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
 
-  useEffect(() => {
-    // getLocalTodos();
+  // useEffect(() => {
+  //   // getLocalTodos();
 
-    fetchTodos();
-  }, []);
+  //   fetchTodos();
+  // }, []);
 
   useEffect(() => {
     // fetchTodos();
@@ -31,52 +31,15 @@ function App() {
           break;
       }
     };
-
+    const getTodos = async () => {
+      axios
+        .get("https://todo-django-restapi.herokuapp.com/api/task-list/")
+        .then((response) => setTodos(response.data));
+    };
+    getTodos();
     filterHandler();
-    // fetchTodos();
-    // function saveLocalTodos() {
-    //   axios
-    //     .post(
-    //       "https://todo-django-restapi.herokuapp.com/api/task-create/",
-    //       todos[todos.length - 1]
-    //     )
-    //     .then(
-    //       (response) => {
-    //         console.log(response);
-    //         console.log(todos[todos.length - 1]);
-    //       },
-    //       (error) => {
-    //         console.log(error);
-    //       }
-    //     );
-    // }
-
-    // saveLocalTodos();
-    // console.log("heyy");
   }, [todos, status]);
 
-  async function fetchTodos() {
-    try {
-      const result = await axios.get(
-        "https://todo-django-restapi.herokuapp.com/api/task-list/"
-      );
-      setTodos(result.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  // const saveLocalTodos = () => {
-  //   localStorage.setItem("todos", JSON.stringify(todos));
-  // };
-  // const getLocalTodos = () => {
-  //   if (localStorage.getItem("todos") === null) {
-  //     localStorage.setItem("todos", JSON.stringify([]));
-  //   } else {
-  //     let todoLocal = JSON.parse(localStorage.getItem("todos"));
-  //     setTodos(todoLocal);
-  //   }
-  // };
   return (
     <div className="App">
       <header>
