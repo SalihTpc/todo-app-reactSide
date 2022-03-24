@@ -7,15 +7,18 @@ const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
   };
   const submitTodoHandler = (e) => {
     e.preventDefault();
+    const postTodos = async () => {
+      const newTodo = { title: inputText, completed: false };
+      await axios.post(
+        "https://todo-django-restapi.herokuapp.com/api/task-create/",
+        newTodo
+      );
+    };
     if (inputText === "") {
       return alert("Please Enter Valid One");
     } else {
-      axios.post("https://todo-django-restapi.herokuapp.com/api/task-create/", {
-        title: inputText,
-        completed: false,
-        id: null,
-      });
-      setTodos([...todos, { title: inputText, completed: false, id: null }]);
+      postTodos();
+      setTodos([...todos, { title: inputText, completed: false }]);
       setInputText("");
     }
   };
@@ -26,6 +29,7 @@ const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
     <form>
       <div className="upper">
         <input
+          autoFocus
           value={inputText}
           onChange={inputTextHandler}
           type="text"
@@ -34,7 +38,8 @@ const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
         <button
           onClick={submitTodoHandler}
           className="todo-button"
-          type="submit">
+          type="submit"
+        >
           <i className="fas fa-plus-circle"></i>
         </button>
       </div>
