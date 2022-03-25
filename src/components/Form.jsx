@@ -1,25 +1,25 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 
-const Form = ({ inputText, setInputText, todos, setTodos, setStatus }) => {
+const Form = ({ inputText, setInputText, setStatus, getTodos }) => {
   const inputTextHandler = (e) => {
     setInputText(e.target.value);
   };
-  const submitTodoHandler = (e) => {
+
+  const submitTodoHandler = async (e) => {
     e.preventDefault();
-    const postTodos = async () => {
+
+    if (inputText === "") {
+      return alert("Please Enter Valid One");
+    } else {
       const newTodo = { title: inputText, completed: false };
       await axios.post(
         "https://todo-django-restapi.herokuapp.com/api/task-create/",
         newTodo
       );
-    };
-    if (inputText === "") {
-      return alert("Please Enter Valid One");
-    } else {
-      postTodos();
-      setTodos([...todos, { title: inputText, completed: false }]);
+      // setTodos([...todos, { title: inputText, completed: false }]);
       setInputText("");
+      getTodos();
     }
   };
   const statusHandler = (e) => {

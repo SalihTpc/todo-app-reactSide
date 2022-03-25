@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Form from "./components/Form";
 import TodoList from "./components/TodoList";
-import axios from "axios";
 
 function App() {
   const [inputText, setInputText] = useState("");
@@ -10,14 +10,22 @@ function App() {
   const [status, setStatus] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState([]);
 
-  // useEffect(() => {
-  //   // getLocalTodos();
-
-  //   fetchTodos();
-  // }, []);
+  const getTodos = async () => {
+    await axios
+      .get("https://todo-django-restapi.herokuapp.com/api/task-list/")
+      .then((response) => setTodos(response.data));
+  };
 
   useEffect(() => {
-    // fetchTodos();
+    const getTodos = async () => {
+      await axios
+        .get("https://todo-django-restapi.herokuapp.com/api/task-list/")
+        .then((response) => setTodos(response.data));
+    };
+    getTodos();
+  }, []);
+
+  useEffect(() => {
     const filterHandler = () => {
       switch (status) {
         case "completed":
@@ -31,14 +39,8 @@ function App() {
           break;
       }
     };
-    const getTodos = async () => {
-      axios
-        .get("https://todo-django-restapi.herokuapp.com/api/task-list/")
-        .then((response) => setTodos(response.data));
-    };
-    getTodos();
     filterHandler();
-  }, [todos, status]);
+  }, [status, todos]);
 
   return (
     <div className="App">
@@ -52,11 +54,13 @@ function App() {
         setInputText={setInputText}
         setStatus={setStatus}
         filteredTodos={filteredTodos}
+        getTodos={getTodos}
       />
       <TodoList
         filteredTodos={filteredTodos}
         setTodos={setTodos}
         todos={todos}
+        getTodos={getTodos}
       />
     </div>
   );

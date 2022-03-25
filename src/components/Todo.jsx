@@ -1,16 +1,17 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 
-const Todo = ({ text, todo, todos, setTodos }) => {
+const Todo = ({ text, todo, getTodos }) => {
   const deleteHandler = () => {
-    // setTodos(todos.filter((el) => el.id !== todo.id));
     async function deleteTodo() {
       await axios.delete(
         `https://todo-django-restapi.herokuapp.com/api/task-delete/${todo.id}`
       );
+      getTodos();
     }
     deleteTodo();
   };
+
   const completeHandler = () => {
     const updatedTodo = { title: todo.title, completed: !todo.completed };
     async function changeTodo() {
@@ -18,21 +19,11 @@ const Todo = ({ text, todo, todos, setTodos }) => {
         `https://todo-django-restapi.herokuapp.com/api/task-update/${todo.id}`,
         updatedTodo
       );
+      getTodos();
     }
     changeTodo();
-    // setTodos(
-    //   todos.map((item) => {
-    //     if (item.id === todo.id) {
-    //       console.log(item.id);
-    //       return {
-    //         ...item,
-    //         completed: !item.completed,
-    //       };
-    //     }
-    //     return item;
-    //   })
-    // );
   };
+
   return (
     <div className={`todo ${todo.completed ? "completed" : ""}`}>
       <button type="button" onClick={completeHandler} className="complete-btn">
