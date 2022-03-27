@@ -22,6 +22,20 @@ function App() {
         .get("https://todo-django-restapi.herokuapp.com/api/task-list/")
         .then((response) => setTodos(response.data));
     };
+    const filterHandler = () => {
+      switch (status) {
+        case "completed":
+          setFilteredTodos(todos.filter((todo) => todo.completed === true));
+          break;
+        case "uncompleted":
+          setFilteredTodos(todos.filter((todo) => todo.completed === false));
+          break;
+        default:
+          setFilteredTodos(todos);
+          break;
+      }
+    };
+    filterHandler();
     getTodos();
   }, []);
 
